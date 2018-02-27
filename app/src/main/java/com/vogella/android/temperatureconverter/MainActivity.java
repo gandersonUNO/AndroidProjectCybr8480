@@ -2,46 +2,35 @@ package com.vogella.android.temperatureconverter;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
-    private EditText text;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text = (EditText) findViewById(R.id.editText);
-
-    }
-
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button1:
-                RadioButton celsiusButton = (RadioButton) findViewById(R.id.radioButton1);
-                RadioButton fahrenheitButton = (RadioButton) findViewById(R.id.radioButton2);
-                if (text.getText().length() == 0) {
-                    Toast.makeText(this, "Please enter a valid number",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                float inputValue = Float.parseFloat(text.getText().toString());
-                if (celsiusButton.isChecked()) {
-                    text.setText(String
-                            .valueOf(ConverterUtil.convertFahrenheitToCelsius(inputValue)));
-                    celsiusButton.setChecked(false);
-                    fahrenheitButton.setChecked(true);
-                } else {
-                    text.setText(String
-                            .valueOf(ConverterUtil.convertCelsiusToFahrenheit(inputValue)));
-                    fahrenheitButton.setChecked(false);
-                    celsiusButton.setChecked(true);
-                }
-                break;
-        }
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        // use this setting to
+        // improve performance if you know that changes
+        // in content do not change the layout size
+        // of the RecyclerView
+        recyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        List<String> input = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            input.add("Test" + i);
+        }// define an adapter
+        mAdapter = new MyAdapter(input);
+        recyclerView.setAdapter(mAdapter);
     }
 }
